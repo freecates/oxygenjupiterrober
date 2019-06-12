@@ -1,4 +1,6 @@
-# Jupiter Rober ReactJS
+**Follwing the impressive and astonished world expasion, Oxygen Area has begun to explore the Space! They have sent its first robot to Jupiter!**
+
+---
 
 ## Technology stack
 
