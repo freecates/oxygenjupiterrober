@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import routerEvents from 'next-router-events'
 import Rodal from 'rodal'
 import styled from 'styled-components'
@@ -99,82 +100,70 @@ const AlignLeftMenutitle = styled(MenuTitle)`
   max-width: 90rem;
 `
 
-class SingleModal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      visible: 0,
-      singleModalItems: this.props.singleModalItems
-    }
-    this.hide = this.hide.bind(this)
-    routerEvents.on('routeChangeStart', this.hide)
+export default function SingleModal(props) {
+  const [state, setState] = useState({
+    visible: 0
+  })
+  routerEvents.on('routeChangeStart', hide)
+  function show(evt) {
+    setState({ visible: evt.target.getAttribute('id') })
+  }
+  function hide() {
+    setState({ visible: false })
   }
 
-  show(evt) {
-    this.setState({ visible: evt.target.getAttribute('id') })
-  }
-
-  hide() {
-    this.setState({ visible: false })
-  }
-
-  render() {
-    const noOKsingleModalItems = this.state.singleModalItems
-    const singleModalItems = [...noOKsingleModalItems]
-    return (
-      <React.Fragment>
-        {singleModalItems
-          .filter(singleModalItem => singleModalItem.class == 'left')
-          .map(singleModalItem => (
-            <RodalStyles key={singleModalItem.id}>
-              {singleModalItem.items ? (
-                <React.Fragment>
-                  <a
-                    style={{ cursor: 'pointer' }}
-                    onClick={this.show.bind(this)}
-                    title={singleModalItem.name}
+  const singleModalItems = [...props.singleModalItems]
+  return (
+    <React.Fragment>
+      {singleModalItems
+        .filter(singleModalItem => singleModalItem.class == 'left')
+        .map(singleModalItem => (
+          <RodalStyles key={singleModalItem.id}>
+            {singleModalItem.items ? (
+              <React.Fragment>
+                <a
+                  style={{ cursor: 'pointer' }}
+                  onClick={show.bind()}
+                  title={singleModalItem.name}
+                  id={singleModalItem.id}
+                  className="single-modal-item-name"
+                >
+                  {singleModalItem.name}
+                </a>
+                <RodalItem className={singleModalItem.class}>
+                  <Rodal
+                    visible={state.visible == singleModalItem.id}
+                    onClose={hide.bind()}
+                    animation="zoom"
+                    duration={1000}
+                    className="rodal-item"
+                    showMask={true}
+                    customStyles={customStyles}
+                    closeOnEsc={true}
                     id={singleModalItem.id}
-                    className="single-modal-item-name"
                   >
-                    {singleModalItem.name}
-                  </a>
-                  <RodalItem className={singleModalItem.class}>
-                    <Rodal
-                      visible={this.state.visible == singleModalItem.id}
-                      onClose={this.hide.bind(this)}
-                      animation="zoom"
-                      duration={1000}
-                      className="rodal-item"
-                      showMask={true}
-                      customStyles={customStyles}
-                      closeOnEsc={true}
-                      id={singleModalItem.id}
-                    >
-                      {singleModalItem.items.map((item, id) => (
-                        <React.Fragment>
-                          <AlignLeftMenutitle key={id}>
-                            <h1 className="black" title={item.name}>
-                              {item.name}
-                            </h1>
-                          </AlignLeftMenutitle>
-                          <section className="rodal-content">
-                            <div className={item.class}>
-                              <ImportMDFile file={item.file} />
-                            </div>
-                          </section>
-                        </React.Fragment>
-                      ))}
-                    </Rodal>
-                  </RodalItem>
-                </React.Fragment>
-              ) : (
-                ''
-              )}
-            </RodalStyles>
-          ))}
-      </React.Fragment>
-    )
-  }
+                    {singleModalItem.items.map((item, id) => (
+                      <React.Fragment>
+                        <AlignLeftMenutitle key={id}>
+                          <h1 className="black" title={item.name}>
+                            {item.name}
+                          </h1>
+                        </AlignLeftMenutitle>
+                        <section className="rodal-content">
+                          <div className={item.class}>
+                            <ImportMDFile file={item.file} />
+                          </div>
+                        </section>
+                      </React.Fragment>
+                    ))}
+                  </Rodal>
+                </RodalItem>
+              </React.Fragment>
+            ) : (
+              ''
+            )}
+          </RodalStyles>
+        ))}
+    </React.Fragment>
+  )
 }
-
-export default SingleModal
