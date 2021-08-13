@@ -10,7 +10,7 @@
     "babel-plugin-styled-components": "^1.10.0",
     "isomorphic-unfetch": "^3.0.0",
     "markdown-to-jsx": "^6.10.2",
-    "next": "^8.1.0",
+    "next": "^11.1.0",
     "next-router-events": "^2.1.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
